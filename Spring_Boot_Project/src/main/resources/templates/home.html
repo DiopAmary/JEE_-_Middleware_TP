@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}" media="screen" />
+	<title>Home</title>
+</head>
+
+<body>
+	<div class="body container border border-primary w-75 mt-3">
+		<h4 class="mt-3">Liste des patients</h4><hr>
+		<div class="mt-4">
+			<div class="container mt-4 ml-5">
+				<form th:action="@{/}" method="get">
+					<label>Mot Clé</label> <input type="text" name="motCle" th:value="${motCle}" />
+					<button class="btn btn-primary">Chercher</button>
+				</form>
+			</div>
+		</div>
+		<div class="container mt-3 ">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Date de naissance</th>
+						<th scope="col">Score</th>
+						<th scope="col">Malade</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="p:${listPatients}">
+						<td th:text="${p.id}"></td>
+						<td th:text="${p.nom}"></td>
+						<td th:text="${p.dateNaissance}"></td>
+						<td th:text="${p.score}"></td>
+						<td th:text="${p.malade}"></td>
+						<td><a th:href="@{/edit(id=${p.id})}"><button class="btn btn-secondary">Edit</button></a></td>
+						<td><a onclick="javascript:return confirm('Voulez-vous supprimer ce patient ?')" th:href="@{/delete(id=${p.id},page=${pageCourante},size=${size},motCle=${motCle})}">
+								<button class="btn btn-danger">Delete</button></a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="container">
+			<ul class="nav nav-pills">
+				<li th:each="pa,status:${pagesNumber}" >
+					<a th:class="${pageCourante}==${status.index}?'btn btn-primary':'btn'" th:href="@{/(page=${status.index},size=${size},motCle=${motCle})}" th:text="${status.index}"></a>
+				</li>
+			</ul>
+		</div>
+			<a class="btn btn-primary bt-sm float-right" th:href="@{/ajouter}">Ajouter un patient</a>
+	</div>
+</body>
+
+</html>
