@@ -22,6 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		/*System.out.println("*************************************");
 		System.out.println(passwordEncoder.encode("123456"));
 		System.out.println("*************************************");
+		
+		 //système d’authentification basé sur une configuration In Memory Authentication
 		auth.inMemoryAuthentication().withUser("dioppp___").password(passwordEncoder.encode("123456")).roles("USER", "ADMIN");
 		auth.inMemoryAuthentication().withUser("amary").password(passwordEncoder.encode("123456")).roles("USER");*/
 		
@@ -31,14 +33,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.dataSource(dataSource)
 			.usersByUsernameQuery("select username as principal, password as credential, active from users where username=?")
 			.authoritiesByUsernameQuery("select username as pricipal, roles from users_roles where username=?")
-			.passwordEncoder(passwordEncoder);
+			.passwordEncoder(passwordEncoder)
+			.rolePrefix("ROLE_");
 			
 	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.formLogin();
+		http.formLogin().loginPage("/login");
 		http.authorizeRequests().antMatchers("/edit**", "/ajouter**", "/delete**").hasRole("ADMIN");
+		http.authorizeRequests().antMatchers("/login", "/bootstrap/**").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
 	}
 	

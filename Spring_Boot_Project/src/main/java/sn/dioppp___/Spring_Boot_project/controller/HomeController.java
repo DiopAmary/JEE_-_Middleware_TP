@@ -3,6 +3,9 @@ package sn.dioppp___.Spring_Boot_project.controller;
 
 import java.sql.Date;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,6 +67,16 @@ public class HomeController {
 		Patient patient = new Patient();
 		model.addAttribute("patient", patient);
 		return "edit";
+	}
+	
+	@GetMapping(value = "/login")
+	public String login( ){
+		return "login";
+	}
+	@GetMapping(value = "/logout")
+	public String logout(HttpServletRequest request ) throws ServletException{
+		request.logout();
+		return "redirect:/login";
 	}
 	
 	
